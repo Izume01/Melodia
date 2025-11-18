@@ -1,0 +1,10 @@
+torch==2.4.0
+torchaudio==2.4.0
+transformers
+diffusers
+accelerate
+safetensors
+soundfile
+Pillow
+boto3
+pydub
