@@ -48,6 +48,7 @@ r2_secret = modal.Secret.from_name("r2-secret")
 class MusicRequest(BaseModel):
     description: str
     instrumental: bool = False
+    lyrics: str = None
 
 # ═══════════════════════════════════════════════════════════════
 # STEP 6: Main Music Generator Class
@@ -202,7 +203,7 @@ class MusicGenerator:
     # ──────────────────────────────────────────────────────────
 
     @modal.method()
-    def generate(self, description: str, instrumental: bool = False):
+    def generate(self, description: str, instrumental: bool = False, lyrics: str = None):
         """Generate complete music package from description"""
         import uuid
 
@@ -213,11 +214,16 @@ class MusicGenerator:
 
         # Step 1: Generate prompt and lyrics
         music_prompt = self.generate_prompt(description)
-        lyrics = "[Instrumental]" if instrumental else self.generate_lyrics(
-            description)
+        
+        if instrumental:
+            final_lyrics = "[Instrumental]"
+        elif lyrics:
+            final_lyrics = lyrics
+        else:
+            final_lyrics = self.generate_lyrics(description)
 
         print(f"🎶 Prompt: {music_prompt}")
-        print(f"📝 Lyrics preview: {lyrics[:150]}...")
+        print(f"📝 Lyrics preview: {final_lyrics[:150]}...")
 
         # Step 2: Generate categories
         categories = self.generate_categories(description)
@@ -227,7 +233,7 @@ class MusicGenerator:
         music_output_path = f"/tmp/output/{uuid.uuid4()}_output.wav"
         self.music_model(
             prompt=music_prompt,
-            lyrics=lyrics,
+            lyrics=final_lyrics,
             audio_duration=120,  # 2 minutes
             save_path=music_output_path,
             infer_step=126,
@@ -252,7 +258,7 @@ class MusicGenerator:
         return {
             "s3_audio": music_file_key,
             "s3_image": image_file_key,
-            "lyrics": lyrics,
+            "lyrics": final_lyrics,
             "categories": categories,
             "prompt": music_prompt
         }
@@ -279,7 +285,8 @@ def generate_music_api(req: MusicRequest):
     generator = MusicGenerator()
     result = generator.generate.remote(
         description=req.description,
-        instrumental=req.instrumental
+        instrumental=req.instrumental,
+        lyrics=req.lyrics
     )
     return result
 
@@ -289,7 +296,7 @@ def generate_music_api(req: MusicRequest):
 
 
 @app.local_entrypoint()
-def main(description: str = "cyberpunk song pop", instrumental: bool = False):
+def main(description: str = "cyberpunk song pop", instrumental: bool = False, lyrics: str = None):
     """
     Test the music generator from terminal
 
@@ -303,7 +310,7 @@ def main(description: str = "cyberpunk song pop", instrumental: bool = False):
     print(f"   Instrumental: {instrumental}")
 
     generator = MusicGenerator()
-    result = generator.generate.remote(description, instrumental)
+    result = generator.generate.remote(description, instrumental, lyrics)
 
     print("\n🎉 Generation complete!")
     print(f"   Audio: r2://{result['s3_audio']}")
