@@ -5,11 +5,12 @@ export const generateSong = inngest.createFunction(
   { id: "generate-song" },
   { event: "generate-song-event" },
   async ({ event, step }) => {
-    const { userId, prompt, instrumental, requestId } = event.data as {
+    const { userId, prompt, instrumental, requestId, lyrics: inputLyrics } = event.data as {
       userId: string;
       prompt: string;
       instrumental: boolean;
       requestId: string;
+      lyrics?: string;
     };
 
     // 1. GENERATE AUDIO + IMAGE + LYRICS
@@ -25,6 +26,7 @@ export const generateSong = inngest.createFunction(
         body: JSON.stringify({
           description: prompt,
           instrumental,
+          lyrics: inputLyrics || "",
         }),
       });
 
