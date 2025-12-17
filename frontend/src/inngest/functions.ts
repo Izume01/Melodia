@@ -1,3 +1,4 @@
+import { revalidatePath } from "next/cache";
 import { inngest } from "./client";
 import { db } from "~/server/db";
 
@@ -115,6 +116,10 @@ export const generateSong = inngest.createFunction(
         });
       });
     });
+
+    await step.run("revalidate-cache" , async () => {
+      revalidatePath('/create')
+    })
 
     return {
       success: true,

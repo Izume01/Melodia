@@ -20,6 +20,7 @@ import clsx from "clsx";
 import { Plus } from "lucide-react";
 import { queueSong } from "~/actions/generation";
 import SongList from "~/components/layouts/song-list";
+import Player from "~/components/music-player/player";
 
 const INSPIRATION_TAGS = [
     // ERAS
@@ -109,7 +110,7 @@ export default function DashboardContent() {
                 </div>
             </header>
 
-            <main className="flex-1 p-4 sm:p-6 overflow-y-auto w-full">
+            <main className="flex-1 p-4 sm:p-6 overflow-y-auto w-full pb-24">
                 <ToggleGroup
                     type="single"
                     defaultValue="left"
@@ -323,6 +324,7 @@ export default function DashboardContent() {
                         </div>
                     )
                 }
+                <Player />
             </main>
         </div>
     );

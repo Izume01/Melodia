@@ -2,6 +2,7 @@
 
 import { useEffect, useState, useRef } from "react";
 import getSongList from "~/hooks/getSongList";
+import { usePlayerStore } from "~/store/store";
 import {
     Table,
     TableBody,
@@ -19,15 +20,14 @@ type Song = {
     title: string;
     prompt: string | null;
     imageS3Key: string | null;
-    s3Key: string | null;
     createdAt: Date | string;
 };
 
 export default function SongList() {
     const [songs, setSongs] = useState<Song[]>([]);
     const [loading, setLoading] = useState(true);
-    const [playingId, setPlayingId] = useState<string | null>(null);
-    const audioRef = useRef<HTMLAudioElement | null>(null);
+    
+    const { currentSong, isPlaying, play, pause } = usePlayerStore();
 
     useEffect(() => {
         const fetchSongs = async () => {
@@ -44,31 +44,17 @@ export default function SongList() {
         fetchSongs();
     }, []);
 
-    const togglePlay = (song: Song) => {
-        if (!song.s3Key) return;
-
-        if (playingId === song.id) {
-            audioRef.current?.pause();
-            setPlayingId(null);
+    const togglePlay = async (song: Song) => {
+        if (currentSong?.id === song.id && isPlaying) {
+            pause();
         } else {
-            if (audioRef.current) {
-                audioRef.current.pause();
-            }
-            audioRef.current = new Audio(song.s3Key);
-            audioRef.current.play();
-            audioRef.current.onended = () => setPlayingId(null);
-            setPlayingId(song.id);
+            await play({
+                id: song.id,
+                title: song.title || "Untitled Track",
+                imageUrl: song.imageS3Key
+            });
         }
     };
-
-    // Cleanup audio on unmount
-    useEffect(() => {
-        return () => {
-            if (audioRef.current) {
-                audioRef.current.pause();
-            }
-        };
-    }, []);
 
     if (loading) {
         return <div className="p-8 text-center text-muted-foreground">Loading songs...</div>;
@@ -101,8 +87,8 @@ export default function SongList() {
                             songs.map((song, index) => (
                                 <TableRow key={song.id} className="group hover:bg-muted/50">
                                     <TableCell className="font-medium relative text-center w-[50px]">
-                                        <span className={cn("group-hover:hidden", playingId === song.id && "text-primary")}>
-                                            {playingId === song.id ? (
+                                        <span className={cn("group-hover:hidden", currentSong?.id === song.id && isPlaying && "text-primary")}>
+                                            {currentSong?.id === song.id && isPlaying ? (
                                                 <span>
                                                     <Pause className="inline-block h-4 w-4 " />
                                                 </span>
@@ -116,7 +102,7 @@ export default function SongList() {
                                             className="hidden group-hover:inline-flex h-8 w-8 absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2"
                                             onClick={() => togglePlay(song)}
                                         >
-                                            {playingId === song.id ? (
+                                            {currentSong?.id === song.id && isPlaying ? (
                                                 <Pause className="h-4 w-4" />
                                             ) : (
                                                 <Play className="h-4 w-4" />
@@ -135,7 +121,7 @@ export default function SongList() {
                                                 </div>
                                             )}
                                             <div className="flex flex-col">
-                                                <span className={cn("font-medium leading-none", playingId === song.id && "text-primary")}>
+                                                <span className={cn("font-medium leading-none", currentSong?.id === song.id && isPlaying && "text-primary")}>
                                                     {song.title || "Untitled Track"}
                                                 </span>
                                                 <span className="text-xs text-muted-foreground line-clamp-1 max-w-[200px] mt-1">
