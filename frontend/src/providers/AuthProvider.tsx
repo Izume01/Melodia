@@ -19,6 +19,9 @@ export function Providers({ children }: { children: ReactNode }) {
                     router.refresh()
             }}
             Link={Link}
+            account={{
+                basePath : "/dashboard"
+            }}
         >
             {children}
         </AuthUIProvider>

@@ -54,8 +54,9 @@ const Player = () => {
     };
 
     return (
-        <div className="fixed bottom-0 left-0 right-0 z-50 bg-background border-t">
-            <div className="max-w-screen-xl mx-auto px-4 py-3">
+        <div className="fixed bottom-0 right-0 z-30 bg-gradient-to-t from-background via-background to-background/80 border-t border-border/40 backdrop-blur-sm" 
+             style={{ left: "var(--sidebar-width, 0)" }}>
+            <div className="w-full max-w-full px-4 py-4">
                 <div className="flex items-center gap-4">
                     {/* Album Art & Song Info */}
                     <div className="flex items-center gap-3 min-w-[200px]">

@@ -8,6 +8,7 @@ import {
     BreadcrumbList,
 } from "~/components/ui/breadcrumb";
 import useStore from "~/store/store";
+import { usePlayerStore } from "~/store/store";
 import {
     ToggleGroup,
     ToggleGroupItem
@@ -20,7 +21,6 @@ import clsx from "clsx";
 import { Plus } from "lucide-react";
 import { queueSong } from "~/actions/generation";
 import SongList from "~/components/layouts/song-list";
-import Player from "~/components/music-player/player";
 
 const INSPIRATION_TAGS = [
     // ERAS
@@ -55,6 +55,7 @@ const INSPIRATION_TAGS = [
 
 export default function DashboardContent() {
     const { setTriggerGroupValue, triggerGroupValue } = useStore();
+    const { currentSong } = usePlayerStore();
 
     const [IsInstrumental, setIsInstrumental] = useState<boolean | undefined>(false);
     const [description, setDescription] = useState<string>("");
@@ -110,7 +111,12 @@ export default function DashboardContent() {
                 </div>
             </header>
 
-            <main className="flex-1 p-4 sm:p-6 overflow-y-auto w-full pb-24">
+            <main
+                className={clsx(
+                    "flex-1 p-4 sm:p-6 overflow-y-auto w-full",
+                    currentSong ? "pb-48" : "pb-4"
+                )}
+            >
                 <ToggleGroup
                     type="single"
                     defaultValue="left"
@@ -223,7 +229,7 @@ export default function DashboardContent() {
                                 >
                                     Generate
                                 </Button>
-                                
+
                                 <SongList />
 
                             </div>
@@ -324,7 +330,6 @@ export default function DashboardContent() {
                         </div>
                     )
                 }
-                <Player />
             </main>
         </div>
     );

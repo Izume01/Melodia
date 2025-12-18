@@ -3,7 +3,7 @@ import { auth } from "~/lib/auth";
 import { redirect } from "next/navigation";
 import AppSidebar from "~/components/layouts/app-sidebar";
 import { SidebarInset } from "~/components/ui/sidebar";
-import DashboardContent from "./_components/dashboard-content";
+import MainContent from "./_components/main-content";
 
 export default async function HomePage() {
 	const session = await auth.api.getSession({
@@ -18,7 +18,7 @@ export default async function HomePage() {
 		<>
 			<AppSidebar />
 			<SidebarInset className="flex h-screen flex-col">
-				<DashboardContent />
+				<MainContent />
 			</SidebarInset>
 		</>
 	);
