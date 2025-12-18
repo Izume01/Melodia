@@ -17,9 +17,11 @@ const s3 = new S3Client({
     }
 })
 
-export async function GET(req: Request,
-    { params }: { params: { id: string } }
+export async function GET(
+    req: Request,
+    { params }: { params: Promise<{ id: string }> }
 ) {
+    const { id } = await params
     const session = await auth.api.getSession({
         headers: await headers(),
     })
@@ -39,7 +41,7 @@ export async function GET(req: Request,
     // 2. Is published (publicly available)
     const song = await db.song.findFirst({
         where: {
-            id: params.id,
+            id: id,
             OR: [
                 { userId: session.user.id },
                 { published: true }
