@@ -7,8 +7,6 @@ import {
     BreadcrumbItem,
     BreadcrumbList,
 } from "~/components/ui/breadcrumb";
-import useStore from "~/store/store";
-import { usePlayerStore } from "~/store/store";
 import {
     ToggleGroup,
     ToggleGroupItem
@@ -21,7 +19,7 @@ import clsx from "clsx";
 import { Plus } from "lucide-react";
 import { queueSong } from "~/actions/generation";
 import SongList from "~/components/layouts/song-list";
-
+import { usePlayerStore } from "~/store/store";
 const INSPIRATION_TAGS = [
     // ERAS
     "80s Retro",
@@ -54,9 +52,14 @@ const INSPIRATION_TAGS = [
 
 
 export default function DashboardContent() {
-    const { setTriggerGroupValue, triggerGroupValue } = useStore();
-    const { currentSong } = usePlayerStore();
+    const { currentSong} = usePlayerStore();
 
+    const hasPlayer = !!currentSong
+
+
+    const [triggerGroupValue, setTriggerGroupValue] = useState<"left" | "right">(
+        "left"
+    );
     const [IsInstrumental, setIsInstrumental] = useState<boolean | undefined>(false);
     const [description, setDescription] = useState<string>("");
     const [lyrics, setLyrics] = useState<string>("");
@@ -123,7 +126,7 @@ export default function DashboardContent() {
                     aria-label="Text alignment"
                     className="mb-4 bg-muted/50 rounded-md border w-full"
                     onValueChange={(value) => {
-                        if (value) setTriggerGroupValue(value);
+                        if (value === "left" || value === "right") setTriggerGroupValue(value);
                     }}
                 >
                     <ToggleGroupItem
@@ -326,6 +329,12 @@ export default function DashboardContent() {
                                 >Generate</Button>
 
                                 <SongList />
+                                
+                                {hasPlayer && (
+                                    <div className="mb-30">  
+                                        <SongList />
+                                    </div>
+                                )}
                             </div>
                         </div>
                     )

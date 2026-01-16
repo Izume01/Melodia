@@ -3,15 +3,14 @@ import { Button } from "~/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "~/components/ui/card";
 import { Badge } from "~/components/ui/badge";
 import { 
-  Music, 
   Play, 
   ArrowRight,
   Headphones,
   Mic,
   Disc,
   Radio,
+  Music,
   Volume2,
-  Waveform
 } from "lucide-react";
 
 export default function LandingPage() {
@@ -21,7 +20,7 @@ export default function LandingPage() {
       <header className="sticky top-0 z-50 w-full">
         <div className="container mx-auto px-6 h-20 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="h-11 w-11 rounded-2xl bg-[#E8E8E8] shadow-[6px_6px_12px_#c5c5c5,-6px_-6px_12px_#ffffff] flex items-center justify-center">
+            <div className="h-11 w-11 rounded-2xl bg-[#E8E8E8] shadow-[4px_4px_8px_#c5c5c5,-4px_-4px_8px_#ffffff] flex items-center justify-center">
               <Music className="h-6 w-6 text-[#4a5568]" />
             </div>
             <span className="text-2xl font-bold tracking-tight text-[#2d3748]">Melodia</span>
@@ -35,12 +34,12 @@ export default function LandingPage() {
 
           <div className="flex items-center gap-4">
             <Link href="/auth/sign-in">
-              <button className="px-5 py-2.5 rounded-xl text-sm font-medium text-[#4a5568] bg-[#E8E8E8] shadow-[inset_4px_4px_8px_#c5c5c5,inset_-4px_-4px_8px_#ffffff] hover:shadow-[inset_2px_2px_4px_#c5c5c5,inset_-2px_-2px_4px_#ffffff] transition-all">
+              <button className="px-5 py-2.5 rounded-xl text-sm font-medium text-[#4a5568] bg-[#E8E8E8] shadow-[inset_3px_3px_6px_#c5c5c5,inset_-3px_-3px_6px_#ffffff] hover:shadow-[inset_2px_2px_4px_#c5c5c5,inset_-2px_-2px_4px_#ffffff] transition-all">
                 Log in
               </button>
             </Link>
             <Link href="/auth/sign-up">
-              <button className="px-6 py-2.5 rounded-xl text-sm font-semibold text-[#2d3748] bg-[#E8E8E8] shadow-[6px_6px_12px_#c5c5c5,-6px_-6px_12px_#ffffff] hover:shadow-[4px_4px_8px_#c5c5c5,-4px_-4px_8px_#ffffff] active:shadow-[inset_4px_4px_8px_#c5c5c5,inset_-4px_-4px_8px_#ffffff] transition-all">
+              <button className="px-6 py-2.5 rounded-xl text-sm font-semibold text-[#2d3748] bg-[#E8E8E8] shadow-[4px_4px_8px_#c5c5c5,-4px_-4px_8px_#ffffff] hover:shadow-[3px_3px_6px_#c5c5c5,-3px_-3px_6px_#ffffff] active:shadow-[inset_3px_3px_6px_#c5c5c5,inset_-3px_-3px_6px_#ffffff] transition-all">
                 Get Started
               </button>
             </Link>
@@ -53,7 +52,7 @@ export default function LandingPage() {
         <section className="py-20 md:py-32 lg:py-40 relative overflow-hidden">
           <div className="container mx-auto px-6 text-center max-w-5xl">
             <div className="inline-block mb-8">
-              <div className="px-6 py-2.5 rounded-full bg-[#E8E8E8] shadow-[inset_3px_3px_6px_#c5c5c5,inset_-3px_-3px_6px_#ffffff] text-[#4a5568] text-sm font-medium">
+              <div className="px-6 py-2.5 rounded-full bg-[#E8E8E8] shadow-[inset_2px_2px_5px_#c5c5c5,inset_-2px_-2px_5px_#ffffff] text-[#4a5568] text-sm font-medium">
                 ✨ Create Your Sound
               </div>
             </div>
@@ -74,13 +73,13 @@ export default function LandingPage() {
             
             <div className="flex flex-col sm:flex-row items-center justify-center gap-6 mb-20">
               <Link href="/auth/sign-up">
-                <button className="px-10 py-4 rounded-2xl text-lg font-semibold text-[#1a202c] bg-[#E8E8E8] shadow-[8px_8px_16px_#c5c5c5,-8px_-8px_16px_#ffffff] hover:shadow-[6px_6px_12px_#c5c5c5,-6px_-6px_12px_#ffffff] active:shadow-[inset_4px_4px_8px_#c5c5c5,inset_-4px_-4px_8px_#ffffff] transition-all flex items-center gap-2">
+                <button className="px-10 py-4 rounded-2xl text-lg font-semibold text-[#1a202c] bg-[#E8E8E8] shadow-[5px_5px_10px_#c5c5c5,-5px_-5px_10px_#ffffff] hover:shadow-[4px_4px_8px_#c5c5c5,-4px_-4px_8px_#ffffff] active:shadow-[inset_3px_3px_6px_#c5c5c5,inset_-3px_-3px_6px_#ffffff] transition-all flex items-center gap-2">
                   Start Creating
                   <ArrowRight className="h-5 w-5" />
                 </button>
               </Link>
               <Link href="#demo">
-                <button className="px-10 py-4 rounded-2xl text-lg font-medium text-[#4a5568] bg-[#E8E8E8] shadow-[inset_4px_4px_8px_#c5c5c5,inset_-4px_-4px_8px_#ffffff] hover:shadow-[inset_2px_2px_4px_#c5c5c5,inset_-2px_-2px_4px_#ffffff] transition-all flex items-center gap-2">
+                <button className="px-10 py-4 rounded-2xl text-lg font-medium text-[#4a5568] bg-[#E8E8E8] shadow-[inset_3px_3px_6px_#c5c5c5,inset_-3px_-3px_6px_#ffffff] hover:shadow-[inset_2px_2px_4px_#c5c5c5,inset_-2px_-2px_4px_#ffffff] transition-all flex items-center gap-2">
                   <Play className="h-5 w-5 fill-current" />
                   Listen to Examples
                 </button>
@@ -95,7 +94,7 @@ export default function LandingPage() {
                 { value: "24/7", label: "Available" },
                 { value: "4.9", label: "Rating" }
               ].map((stat, i) => (
-                <div key={i} className="p-6 rounded-2xl bg-[#E8E8E8] shadow-[6px_6px_12px_#c5c5c5,-6px_-6px_12px_#ffffff] hover:shadow-[4px_4px_8px_#c5c5c5,-4px_-4px_8px_#ffffff] transition-all">
+                <div key={i} className="p-6 rounded-2xl bg-[#E8E8E8] shadow-[4px_4px_8px_#c5c5c5,-4px_-4px_8px_#ffffff] hover:shadow-[3px_3px_6px_#c5c5c5,-3px_-3px_6px_#ffffff] transition-all">
                   <div className="text-3xl font-bold text-[#1a202c] mb-1">{stat.value}</div>
                   <div className="text-sm text-[#4a5568] font-medium">{stat.label}</div>
                 </div>
@@ -132,8 +131,8 @@ export default function LandingPage() {
                   icon: Radio
                 }
               ].map((feature, i) => (
-                <div key={i} className="p-8 rounded-3xl bg-[#E8E8E8] shadow-[8px_8px_16px_#c5c5c5,-8px_-8px_16px_#ffffff] hover:shadow-[6px_6px_12px_#c5c5c5,-6px_-6px_12px_#ffffff] transition-all group">
-                  <div className="h-16 w-16 rounded-2xl bg-[#E8E8E8] shadow-[inset_4px_4px_8px_#c5c5c5,inset_-4px_-4px_8px_#ffffff] flex items-center justify-center mb-6 group-hover:shadow-[inset_2px_2px_4px_#c5c5c5,inset_-2px_-2px_4px_#ffffff] transition-all">
+                <div key={i} className="p-8 rounded-3xl bg-[#E8E8E8] shadow-[5px_5px_10px_#c5c5c5,-5px_-5px_10px_#ffffff] hover:shadow-[4px_4px_8px_#c5c5c5,-4px_-4px_8px_#ffffff] transition-all group">
+                  <div className="h-16 w-16 rounded-2xl bg-[#E8E8E8] shadow-[inset_3px_3px_6px_#c5c5c5,inset_-3px_-3px_6px_#ffffff] flex items-center justify-center mb-6 group-hover:shadow-[inset_2px_2px_4px_#c5c5c5,inset_-2px_-2px_4px_#ffffff] transition-all">
                     <feature.icon className="h-8 w-8 text-[#4a5568]" />
                   </div>
                   <h3 className="text-2xl font-bold mb-3 text-[#1a202c]">{feature.title}</h3>
@@ -152,7 +151,7 @@ export default function LandingPage() {
             <div className="flex flex-col lg:flex-row items-center gap-16 lg:gap-20">
               <div className="lg:w-1/2">
                 <div className="inline-block mb-6">
-                  <div className="px-4 py-1.5 rounded-full bg-[#E8E8E8] shadow-[inset_3px_3px_6px_#c5c5c5,inset_-3px_-3px_6px_#ffffff] text-[#4a5568] text-xs font-medium">
+                  <div className="px-4 py-1.5 rounded-full bg-[#E8E8E8] shadow-[inset_2px_2px_5px_#c5c5c5,inset_-2px_-2px_5px_#ffffff] text-[#4a5568] text-xs font-medium">
                     Simple Process
                   </div>
                 </div>
@@ -168,7 +167,7 @@ export default function LandingPage() {
                     { num: "3", title: "Make It Yours", desc: "Listen, tweak if needed, and download. It's yours to use however you want." }
                   ].map((step, i) => (
                     <div key={i} className="flex gap-5 group">
-                      <div className="h-12 w-12 rounded-xl bg-[#E8E8E8] shadow-[6px_6px_12px_#c5c5c5,-6px_-6px_12px_#ffffff] flex items-center justify-center shrink-0 group-hover:shadow-[4px_4px_8px_#c5c5c5,-4px_-4px_8px_#ffffff] transition-all">
+                      <div className="h-12 w-12 rounded-xl bg-[#E8E8E8] shadow-[4px_4px_8px_#c5c5c5,-4px_-4px_8px_#ffffff] flex items-center justify-center shrink-0 group-hover:shadow-[3px_3px_6px_#c5c5c5,-3px_-3px_6px_#ffffff] transition-all">
                         <span className="text-xl font-bold text-[#1a202c]">{step.num}</span>
                       </div>
                       <div className="pt-1">
@@ -181,11 +180,11 @@ export default function LandingPage() {
               </div>
               
               <div className="lg:w-1/2 w-full">
-                <div className="p-8 rounded-[3rem] bg-[#E8E8E8] shadow-[12px_12px_24px_#c5c5c5,-12px_-12px_24px_#ffffff] relative overflow-hidden">
+                <div className="p-8 rounded-[3rem] bg-[#E8E8E8] shadow-[6px_6px_12px_#c5c5c5,-6px_-6px_12px_#ffffff] relative overflow-hidden">
                   {/* Mock Music Player Interface */}
                   <div className="space-y-6">
                     {/* Waveform Visualization */}
-                    <div className="h-32 rounded-2xl bg-[#E8E8E8] shadow-[inset_4px_4px_8px_#c5c5c5,inset_-4px_-4px_8px_#ffffff] p-6 flex items-end justify-center gap-1">
+                    <div className="h-32 rounded-2xl bg-[#E8E8E8] shadow-[inset_3px_3px_6px_#c5c5c5,inset_-3px_-3px_6px_#ffffff] p-6 flex items-end justify-center gap-1">
                       {[...Array(20)].map((_, i) => (
                         <div 
                           key={i}
@@ -197,19 +196,19 @@ export default function LandingPage() {
 
                     {/* Track Info */}
                     <div className="space-y-3">
-                      <div className="h-6 rounded-xl bg-[#E8E8E8] shadow-[inset_3px_3px_6px_#c5c5c5,inset_-3px_-3px_6px_#ffffff] w-3/4"></div>
+                      <div className="h-6 rounded-xl bg-[#E8E8E8] shadow-[inset_2px_2px_5px_#c5c5c5,inset_-2px_-2px_5px_#ffffff] w-3/4"></div>
                       <div className="h-4 rounded-lg bg-[#E8E8E8] shadow-[inset_2px_2px_4px_#c5c5c5,inset_-2px_-2px_4px_#ffffff] w-1/2"></div>
                     </div>
 
                     {/* Controls */}
                     <div className="flex items-center justify-center gap-4 pt-4">
-                      <button className="h-12 w-12 rounded-xl bg-[#E8E8E8] shadow-[6px_6px_12px_#c5c5c5,-6px_-6px_12px_#ffffff] flex items-center justify-center hover:shadow-[4px_4px_8px_#c5c5c5,-4px_-4px_8px_#ffffff] active:shadow-[inset_3px_3px_6px_#c5c5c5,inset_-3px_-3px_6px_#ffffff] transition-all">
+                      <button className="h-12 w-12 rounded-xl bg-[#E8E8E8] shadow-[4px_4px_8px_#c5c5c5,-4px_-4px_8px_#ffffff] flex items-center justify-center hover:shadow-[3px_3px_6px_#c5c5c5,-3px_-3px_6px_#ffffff] active:shadow-[inset_2px_2px_5px_#c5c5c5,inset_-2px_-2px_5px_#ffffff] transition-all">
                         <Play className="h-5 w-5 text-[#4a5568] ml-0.5" />
                       </button>
                       <div className="flex-1 h-2 rounded-full bg-[#E8E8E8] shadow-[inset_2px_2px_4px_#c5c5c5,inset_-2px_-2px_4px_#ffffff] overflow-hidden">
                         <div className="h-full w-1/3 bg-[#4a5568] rounded-full"></div>
                       </div>
-                      <button className="h-10 w-10 rounded-xl bg-[#E8E8E8] shadow-[inset_3px_3px_6px_#c5c5c5,inset_-3px_-3px_6px_#ffffff] flex items-center justify-center">
+                      <button className="h-10 w-10 rounded-xl bg-[#E8E8E8] shadow-[inset_2px_2px_5px_#c5c5c5,inset_-2px_-2px_5px_#ffffff] flex items-center justify-center">
                         <Volume2 className="h-4 w-4 text-[#4a5568]" />
                       </button>
                     </div>
@@ -223,7 +222,7 @@ export default function LandingPage() {
         {/* CTA Section */}
         <section className="py-32 bg-[#E8E8E8]">
           <div className="container mx-auto px-6 text-center">
-            <div className="max-w-3xl mx-auto p-12 rounded-[3rem] bg-[#E8E8E8] shadow-[12px_12px_24px_#c5c5c5,-12px_-12px_24px_#ffffff]">
+            <div className="max-w-3xl mx-auto p-12 rounded-[3rem] bg-[#E8E8E8] shadow-[6px_6px_12px_#c5c5c5,-6px_-6px_12px_#ffffff]">
               <h2 className="text-4xl md:text-6xl font-bold mb-6 text-[#1a202c]">
                 Ready to Create?
               </h2>
@@ -231,7 +230,7 @@ export default function LandingPage() {
                 Join thousands of musicians, creators, and dreamers making their sound.
               </p>
               <Link href="/auth/sign-up">
-                <button className="px-12 py-5 rounded-2xl text-lg font-bold text-[#1a202c] bg-[#E8E8E8] shadow-[8px_8px_16px_#c5c5c5,-8px_-8px_16px_#ffffff] hover:shadow-[6px_6px_12px_#c5c5c5,-6px_-6px_12px_#ffffff] active:shadow-[inset_4px_4px_8px_#c5c5c5,inset_-4px_-4px_8px_#ffffff] transition-all inline-flex items-center gap-2">
+                <button className="px-12 py-5 rounded-2xl text-lg font-bold text-[#1a202c] bg-[#E8E8E8] shadow-[5px_5px_10px_#c5c5c5,-5px_-5px_10px_#ffffff] hover:shadow-[4px_4px_8px_#c5c5c5,-4px_-4px_8px_#ffffff] active:shadow-[inset_3px_3px_6px_#c5c5c5,inset_-3px_-3px_6px_#ffffff] transition-all inline-flex items-center gap-2">
                   Start Making Music
                   <ArrowRight className="h-5 w-5" />
                 </button>
@@ -247,7 +246,7 @@ export default function LandingPage() {
           <div className="grid md:grid-cols-4 gap-12 mb-12">
             <div className="col-span-1 md:col-span-1">
               <div className="flex items-center gap-3 mb-6">
-                <div className="h-8 w-8 rounded-xl bg-[#E8E8E8] shadow-[4px_4px_8px_#c5c5c5,-4px_-4px_8px_#ffffff] flex items-center justify-center">
+                <div className="h-8 w-8 rounded-xl bg-[#E8E8E8] shadow-[3px_3px_6px_#c5c5c5,-3px_-3px_6px_#ffffff] flex items-center justify-center">
                   <Music className="h-5 w-5 text-[#4a5568]" />
                 </div>
                 <span className="text-xl font-bold text-[#1a202c]">Melodia</span>

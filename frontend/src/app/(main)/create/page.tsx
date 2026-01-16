@@ -16,7 +16,7 @@ export default async function HomePage() {
     return (
         <>
             <AppSidebar />
-            <SidebarInset className="flex h-screen flex-col">
+            <SidebarInset className="flex h-screen flex-col pb-20">
                 <DashboardContent />
             </SidebarInset>
         </>

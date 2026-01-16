@@ -2,9 +2,6 @@ import "~/styles/globals.css";
 
 import type { Metadata } from "next";
 import { Geist } from "next/font/google";
-import { SidebarProvider } from "~/components/ui/sidebar";
-import { Providers } from "~/providers/AuthProvider";
-import Player from "~/components/music-player/player";
 
 export const metadata: Metadata = {
 	title: "Create T3 App",
@@ -17,18 +14,13 @@ const geist = Geist({
 	variable: "--font-geist-sans",
 });
 
-export default function RootLayout({
+export default function LandingLayout({
 	children,
 }: Readonly<{ children: React.ReactNode }>) {
 	return (
 		<html lang="en" className={`${geist.variable}`}>
 			<body>
-				<SidebarProvider>
-					<Providers>
-						{children}
-					</Providers>
-					<Player />
-				</SidebarProvider>
+				{children}
 			</body>
 		</html>
 	);

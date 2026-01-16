@@ -1,122 +1,254 @@
 "use client";
 
-import React, { useEffect } from 'react';
-import { usePlayerStore } from '~/store/store';
-import { Button } from '~/components/ui/button';
-import { Play, Pause, SkipBack, SkipForward } from 'lucide-react';
-import { Slider } from '~/components/ui/slider';
+import React, { useRef, useEffect, useCallback } from "react";
+import AudioPlayer, { RHAP_UI } from "react-h5-audio-player";
+import "react-h5-audio-player/lib/styles.css";
+import { usePlayerStore } from "~/store/store";
+import { useSidebar } from "~/components/ui/sidebar";
 
 const Player = () => {
-    const { currentSong, isPlaying, duration, currentTime, play, pause, seek } = usePlayerStore();
+    const playerRef = useRef<AudioPlayer>(null);
+    const lastTimeUpdate = useRef<number>(0);
+    
+    const { isMobile, open } = useSidebar();
+    
+    const currentSong = usePlayerStore((s) => s.currentSong);
+    const isPlaying = usePlayerStore((s) => s.isPlaying);
+    const audioUrl = usePlayerStore((s) => s.audioUrl);
+    const setIsPlaying = usePlayerStore((s) => s.setIsPlaying);
+    const setDuration = usePlayerStore((s) => s.setDuration);
+    const setCurrentTime = usePlayerStore((s) => s.setCurrentTime);
+    const setAudioRef = usePlayerStore((s) => s.setAudioRef);
 
+    // Calculate sidebar width - offcanvas mode means 0 when collapsed
+    const sidebarWidth = isMobile || !open ? "0px" : "16rem";
+
+    // Set audio ref when player mounts
     useEffect(() => {
-        const handleKeyPress = (e: KeyboardEvent) => {
-            // Ignore if user is typing in an input/textarea
-            if (e.target instanceof HTMLInputElement || e.target instanceof HTMLTextAreaElement) {
-                return;
-            }
-
-            if (e.code === 'Space') {
-                e.preventDefault();
-                if (currentSong) {
-                    if (isPlaying) {
-                        pause();
-                    } else {
-                        play(currentSong);
-                    }
-                }
-            } else if (e.code === 'ArrowLeft') {
-                e.preventDefault();
-                seek(Math.max(0, currentTime - 5));
-            } else if (e.code === 'ArrowRight') {
-                e.preventDefault();
-                seek(Math.min(duration, currentTime + 5));
-            }
-        };
-
-        window.addEventListener('keydown', handleKeyPress);
-        return () => window.removeEventListener('keydown', handleKeyPress);
-    }, [currentSong, isPlaying, currentTime, duration, play, pause, seek]);
-
-    if (!currentSong) return null;
-
-    const formatTime = (seconds: number) => {
-        if (!isFinite(seconds)) return '0:00';
-        const mins = Math.floor(seconds / 60);
-        const secs = Math.floor(seconds % 60);
-        return `${mins}:${secs.toString().padStart(2, '0')}`;
-    };
-
-    const handleSeek = (value: number[]) => {
-        if (value[0] !== undefined) {
-            seek(value[0]);
+        const audio = playerRef.current?.audio?.current;
+        if (audio) {
+            setAudioRef(audio);
         }
-    };
+    }, [setAudioRef]);
+
+    // Sync play state with store
+    useEffect(() => {
+        const audio = playerRef.current?.audio?.current;
+        if (!audio || !audioUrl) return;
+
+        if (isPlaying) {
+            audio.play().catch(() => {});
+        } else {
+            audio.pause();
+        }
+    }, [isPlaying, audioUrl]);
+
+    // Throttled time update to prevent excessive re-renders
+    const handleListen = useCallback((e: Event) => {
+        const now = Date.now();
+        // Only update every 250ms
+        if (now - lastTimeUpdate.current < 250) return;
+        lastTimeUpdate.current = now;
+        
+        const audio = e.currentTarget as HTMLAudioElement;
+        if (audio) setCurrentTime(audio.currentTime);
+    }, [setCurrentTime]);
+
+    const handlePlay = useCallback(() => {
+        setIsPlaying(true);
+    }, [setIsPlaying]);
+
+    const handlePause = useCallback(() => {
+        setIsPlaying(false);
+    }, [setIsPlaying]);
+
+    const handleEnded = useCallback(() => {
+        setIsPlaying(false);
+        setCurrentTime(0);
+    }, [setIsPlaying, setCurrentTime]);
+
+    const handleLoadedMetaData = useCallback((e: Event) => {
+        const audio = e.currentTarget as HTMLAudioElement;
+        if (audio) setDuration(audio.duration);
+    }, [setDuration]);
+
+    if (!currentSong || !audioUrl) return null;
 
     return (
-        <div className="fixed bottom-0 right-0 z-30 bg-gradient-to-t from-background via-background to-background/80 border-t border-border/40 backdrop-blur-sm" 
-             style={{ left: "var(--sidebar-width, 0)" }}>
-            <div className="w-full max-w-full px-4 py-4">
-                <div className="flex items-center gap-4">
-                    {/* Album Art & Song Info */}
-                    <div className="flex items-center gap-3 min-w-[200px]">
-                        {currentSong.imageUrl && (
-                            <img 
-                                src={currentSong.imageUrl} 
-                                alt={currentSong.title} 
-                                className="w-14 h-14 rounded-md object-cover" 
-                            />
-                        )}
-                        <div className="flex flex-col">
-                            <h3 className="text-sm font-semibold line-clamp-1">{currentSong.title}</h3>
-                        </div>
+        <div 
+            className="fixed bottom-0 right-0 z-50 border-t border-border bg-background transition-[left] duration-200 ease-linear"
+            style={{ left: sidebarWidth }}
+        >
+            <div className="mx-auto flex items-center gap-4 px-4 py-2">
+                {/* Song info */}
+                <div className="flex items-center gap-3 min-w-0 w-32 sm:w-48 shrink-0">
+                    {currentSong.imageUrl && (
+                        <img
+                            src={currentSong.imageUrl}
+                            alt={currentSong.title}
+                            className="w-10 h-10 sm:w-12 sm:h-12 rounded-md object-cover shadow-md"
+                        />
+                    )}
+                    <div className="min-w-0 hidden sm:block">
+                        <p className="text-sm font-semibold truncate">
+                            {currentSong.title}
+                        </p>
                     </div>
+                </div>
 
-                    {/* Controls */}
-                    <div className="flex-1 flex flex-col items-center gap-2">
-                        <div className="flex items-center gap-2">
-                            <Button variant="ghost" size="icon" className="h-8 w-8">
-                                <SkipBack className="h-4 w-4" />
-                            </Button>
-                            <Button 
-                                variant="default" 
-                                size="icon" 
-                                className="h-10 w-10 rounded-full"
-                                onClick={isPlaying ? pause : () => play(currentSong)}
-                            >
-                                {isPlaying ? (
-                                    <Pause className="h-5 w-5" />
-                                ) : (
-                                    <Play className="h-5 w-5 ml-0.5" />
-                                )}
-                            </Button>
-                            <Button variant="ghost" size="icon" className="h-8 w-8">
-                                <SkipForward className="h-4 w-4" />
-                            </Button>
-                        </div>
-
-                        {/* Progress Bar */}
-                        <div className="flex items-center gap-2 w-full max-w-md">
-                            <span className="text-xs text-muted-foreground min-w-[40px] text-right">
-                                {formatTime(currentTime)}
-                            </span>
-                            <Slider
-                                value={[currentTime]}
-                                max={duration || 100}
-                                step={1}
-                                onValueChange={handleSeek}
-                                className="flex-1"
-                            />
-                            <span className="text-xs text-muted-foreground min-w-[40px]">
-                                {formatTime(duration)}
-                            </span>
-                        </div>
-                    </div>
-
-                    {/* Right side - Volume, etc */}
-                    <div className="min-w-[200px]"></div>
+                {/* Audio Player */}
+                <div className="flex-1 min-w-0">
+                    <AudioPlayer
+                        ref={playerRef}
+                        key={currentSong.id}
+                        src={audioUrl}
+                        autoPlayAfterSrcChange={true}
+                        showSkipControls={false}
+                        showJumpControls={false}
+                        showDownloadProgress={true}
+                        showFilledProgress={true}
+                        customProgressBarSection={[
+                            RHAP_UI.CURRENT_TIME,
+                            RHAP_UI.PROGRESS_BAR,
+                            RHAP_UI.DURATION,
+                        ]}
+                        customControlsSection={[
+                            RHAP_UI.MAIN_CONTROLS,
+                            RHAP_UI.VOLUME_CONTROLS,
+                        ]}
+                        onPlay={handlePlay}
+                        onPause={handlePause}
+                        onEnded={handleEnded}
+                        onLoadedMetaData={handleLoadedMetaData}
+                        onListen={handleListen}
+                        listenInterval={250}
+                        layout="horizontal"
+                        className="melodia-player"
+                    />
                 </div>
             </div>
+
+            <style jsx global>{`
+                .melodia-player {
+                    background: transparent !important;
+                    box-shadow: none !important;
+                    padding: 0 !important;
+                }
+                
+                .melodia-player .rhap_container {
+                    background: transparent !important;
+                    box-shadow: none !important;
+                    padding: 0 !important;
+                }
+                
+                .melodia-player .rhap_main {
+                    flex-direction: row !important;
+                    gap: 0.5rem;
+                }
+                
+                .melodia-player .rhap_controls-section {
+                    flex: 0 0 auto !important;
+                    margin: 0 !important;
+                }
+                
+                .melodia-player .rhap_progress-section {
+                    flex: 1 !important;
+                    gap: 0.5rem;
+                }
+                
+                .melodia-player .rhap_progress-bar {
+                    background: hsl(var(--muted)) !important;
+                    height: 4px !important;
+                    border-radius: 2px !important;
+                }
+                
+                .melodia-player .rhap_progress-filled {
+                    background: #3b82f6 !important;
+                    border-radius: 2px !important;
+                }
+                
+                .melodia-player .rhap_progress-indicator {
+                    background: #3b82f6 !important;
+                    width: 12px !important;
+                    height: 12px !important;
+                    top: -4px !important;
+                    box-shadow: 0 0 4px rgba(59, 130, 246, 0.4) !important;
+                }
+                
+                .melodia-player .rhap_download-progress {
+                    background: hsl(var(--muted-foreground) / 0.3) !important;
+                    border-radius: 2px !important;
+                }
+                
+                .melodia-player .rhap_time {
+                    color: hsl(var(--muted-foreground)) !important;
+                    font-size: 0.75rem !important;
+                    min-width: 2.5rem;
+                }
+                
+                .melodia-player .rhap_current-time {
+                    text-align: right;
+                }
+                
+                .melodia-player .rhap_button-clear {
+                    color: hsl(var(--foreground)) !important;
+                    transition: color 0.15s, transform 0.15s !important;
+                }
+                
+                .melodia-player .rhap_button-clear:hover {
+                    color: #3b82f6 !important;
+                    transform: scale(1.1);
+                }
+                
+                .melodia-player .rhap_main-controls-button {
+                    width: 36px !important;
+                    height: 36px !important;
+                }
+                
+                .melodia-player .rhap_play-pause-button {
+                    width: 40px !important;
+                    height: 40px !important;
+                }
+                
+                .melodia-player .rhap_play-pause-button svg {
+                    width: 20px !important;
+                    height: 20px !important;
+                }
+                
+                .melodia-player .rhap_volume-controls {
+                    flex: 0 0 auto !important;
+                    justify-content: flex-end !important;
+                }
+                
+                .melodia-player .rhap_volume-bar {
+                    background: hsl(var(--muted)) !important;
+                    height: 4px !important;
+                    border-radius: 2px !important;
+                }
+                
+                .melodia-player .rhap_volume-indicator {
+                    background: #3b82f6 !important;
+                    width: 10px !important;
+                    height: 10px !important;
+                    box-shadow: 0 0 4px rgba(59, 130, 246, 0.4) !important;
+                }
+                
+                .melodia-player .rhap_volume-filled {
+                    background: #3b82f6 !important;
+                    border-radius: 2px !important;
+                }
+                
+                /* Hide volume on mobile */
+                @media (max-width: 640px) {
+                    .melodia-player .rhap_volume-controls {
+                        display: none !important;
+                    }
+                    .melodia-player .rhap_time {
+                        min-width: 2rem;
+                        font-size: 0.65rem !important;
+                    }
+                }
+            `}</style>
         </div>
     );
 };

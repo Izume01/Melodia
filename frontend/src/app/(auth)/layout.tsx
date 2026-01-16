@@ -1,5 +1,6 @@
 import "~/styles/globals.css";
 import { Providers } from "~/providers/AuthProvider";
+import { Toaster } from "~/components/ui/sonner";
 
 import type { Metadata } from "next";
 import { Geist } from "next/font/google";
@@ -23,6 +24,7 @@ export default function RootLayout({
 			<body>
 				<Providers>
 					{children}
+					<Toaster />
 				</Providers>
 			</body>
 		</html>
